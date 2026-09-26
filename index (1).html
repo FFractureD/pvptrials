@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PVPTRIALS Rankings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #0a0e17;
+    --panel: #111a2b;
+    --card: #0e1524;
+    --card-hover: #131d31;
+    --line: #1f2c42;
+    --line-bright: #2c3f5e;
+    --ink: #e8edf5;
+    --ink-dim: #6b7d99;
+    --ink-faint: #445269;
+    --cyan: #4fd1ff;
+    --cyan-dim: #4fd1ff33;
+    --violet: #8c7cf0;
+    --t1: #4fd1ff;
+    --t2: #7c8cff;
+    --t3: #a07cf0;
+    --t4: #6b7d99;
+    --t5: #48566e;
+    --font-display: 'Space Grotesk', 'Segoe UI', sans-serif;
+    --font-body: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  }
+  :root:not([data-theme="dark"]) { color-scheme: dark; }
+
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+
+  body {
+    margin: 0;
+    min-height: 100%;
+    background: var(--void);
+    background-image:
+      linear-gradient(rgba(79,209,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,209,255,0.035) 1px, transparent 1px),
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(79,209,255,0.14), transparent 60%);
+    background-size: 42px 42px, 42px 42px, 100% 100%;
+    color: var(--ink);
+    font-family: var(--font-body);
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  ::selection { background: var(--cyan-dim); color: var(--ink); }
+
+  /* ---------- header ---------- */
+  header {
+    position: relative;
+    padding: 4.5rem 1.5rem 3rem;
+    text-align: center;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+  header::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 50%;
+    width: 640px; height: 320px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse at center, rgba(79,209,255,0.16), transparent 70%);
+    pointer-events: none;
+  }
+  .eyebrow {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--cyan);
+    background: rgba(79,209,255,0.08);
+    border: 1px solid rgba(79,209,255,0.25);
+    padding: 0.32rem 0.8rem 0.32rem 0.65rem;
+    border-radius: 999px;
+    margin-bottom: 1.4rem;
+  }
+  .eyebrow .pip {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px 1px var(--cyan);
+    animation: pip 1.8s ease-in-out infinite;
+  }
+  @keyframes pip { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  header h1 {
+    position: relative;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.4rem, 6vw, 3.8rem);
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+    margin: 0 0 0.7rem;
+  }
+  header h1 .glow {
+    background: linear-gradient(120deg, var(--cyan), var(--violet) 85%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  header p {
+    position: relative;
+    color: var(--ink-dim);
+    font-size: 0.98rem;
+    margin: 0;
+    max-width: 40ch;
+    margin-inline: auto;
+  }
+
+  /* ---------- toolbar ---------- */
+  main { max-width: 800px; margin: 0 auto; padding: 2.2rem 1.25rem 4rem; }
+
+  .toolbar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.4rem;
+    padding: 0.7rem 0.9rem;
+    background: rgba(10,14,23,0.82);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    flex-wrap: wrap;
+  }
+  .status { display: flex; align-items: center; gap: 0.55rem; color: var(--ink-dim); font-size: 0.8rem; font-weight: 500; }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #3ee87a;
+    box-shadow: 0 0 6px 1px #3ee87a99;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(62,232,122,0.5); }
+    70% { box-shadow: 0 0 0 6px rgba(62,232,122,0); }
+    100% { box-shadow: 0 0 0 0 rgba(62,232,122,0); }
+  }
+  .search-wrap { position: relative; }
+  .search {
+    background: var(--card);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 0.5rem 0.85rem 0.5rem 2.1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-family: var(--font-body);
+    min-width: 190px;
+    transition: border-color .15s, background .15s;
+  }
+  .search::placeholder { color: var(--ink-faint); }
+  .search:focus { outline: none; border-color: var(--cyan); background: var(--card-hover); }
+  .search-wrap svg {
+    position: absolute; left: 0.7rem; top: 50%; transform: translateY(-50%);
+    width: 14px; height: 14px; stroke: var(--ink-faint); pointer-events: none;
+  }
+
+  /* ---------- cards ---------- */
+  .card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2.6rem 1fr auto;
+    align-items: center;
+    column-gap: 1rem;
+    row-gap: 0.75rem;
+    padding: 1rem 1.1rem 1rem 1.3rem;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    margin-bottom: 0.6rem;
+    overflow: hidden;
+    transition: background .5s ease, border-color .25s ease, transform .15s ease;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--tier-color, var(--ink-faint));
+    box-shadow: 0 0 12px 0 var(--tier-color, transparent);
+  }
+  .card:hover {
+    border-color: var(--line-bright);
+    background: var(--card-hover);
+    transform: translateX(2px);
+  }
+  .card.flash {
+    background: rgba(79,209,255,0.1);
+    border-color: var(--cyan);
+  }
+  .card.flash::before { box-shadow: 0 0 20px 2px var(--tier-color, var(--cyan)); }
+
+  .rank {
+    color: var(--ink-faint);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.95rem;
+  }
+  .rank.top3 { color: var(--cyan); text-shadow: 0 0 10px rgba(79,209,255,0.5); }
+
+  .nick {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: -0.005em;
+  }
+
+  .general {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.92rem;
+    padding: 0.38rem 0.75rem;
+    border-radius: 7px;
+    color: var(--void);
+    background: var(--tier-color, var(--cyan));
+    white-space: nowrap;
+    box-shadow: 0 0 16px -4px var(--tier-color, var(--cyan));
+  }
+  .general .pts { font-family: var(--font-body); font-weight: 600; font-size: 0.68rem; opacity: 0.7; }
+
+  .modes {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding-left: 3.6rem;
+  }
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 0.28rem 0.65rem 0.28rem 0.55rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  .chip .mode-name { color: var(--ink-dim); }
+  .chip .mode-tier { font-family: var(--font-display); font-weight: 700; color: var(--chip-color, var(--ink)); }
+  .chip.unranked { opacity: 0.35; }
+  .chip.unranked .mode-tier { color: var(--ink-faint); }
+
+  .empty {
+    text-align: center;
+    color: var(--ink-dim);
+    padding: 3.5rem 1.5rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    border: 1px dashed var(--line);
+    border-radius: 12px;
+    background: var(--card);
+  }
+  .empty strong { color: var(--ink); }
+
+  footer {
+    text-align: center;
+    color: var(--ink-faint);
+    font-size: 0.78rem;
+    padding: 2rem 1rem 3rem;
+    letter-spacing: 0.02em;
+  }
+
+  @media (max-width: 480px) {
+    .card { grid-template-columns: 2rem 1fr auto; padding: 0.85rem 0.9rem 0.85rem 1.1rem; }
+    .modes { padding-left: 0; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .search { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow"><span class="pip"></span>Live Rankings</div>
+  <h1>PVPTRIALS <span class="glow">Rankings</span></h1>
+  <p>Official tierlist for PVP: TRIALS — every gamemode, one profile, updated the instant someone tests up.</p>
+</header>
+
+<main>
+  <div class="toolbar">
+    <div class="status"><span class="dot"></span><span id="statusText">connecting…</span></div>
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search" id="search" type="text" placeholder="Find a player…">
+    </div>
+  </div>
+  <div id="board"></div>
+</main>
+
+<footer>PVPTRIALS · community-run tier tracker</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ---- fill in from your Supabase project settings (Project Settings -> API) ----
+const SUPABASE_URL = "https://sracbluedbibugcwqvok.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyYWNibHVlZGJpYnVnY3dxdm9rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0NDY1MDAsImV4cCI6MjEwNjAyMjUwMH0.ZheKmlxnOPqMbEjA0eIGuKwdquhnRk5zagYmBn1sysA";
+// --------------------------------------------------------------------------------
+
+const MODE_ORDER = ["Sword", "Axe", "Mace", "UHC", "NethPot", "Pot", "SMP", "Vanilla"];
+const TIER_COLOR = { "1": "var(--t1)", "2": "var(--t2)", "3": "var(--t3)", "4": "var(--t4)", "5": "var(--t5)" };
+const SUB_ORDER = { H: 0, M: 1, L: 2 };
+
+let players = [];
+let playerModes = [];
+let client = null;
+let searchTerm = "";
+const configured = !SUPABASE_URL.includes("YOUR-PROJECT-REF");
+
+function tierColor(tier) {
+  if (!tier) return "var(--ink-faint)";
+  return TIER_COLOR[tier.slice(-1)] || "var(--ink-faint)";
+}
+
+function tierSortKey(tier) {
+  if (!tier) return [9, 9];
+  const level = parseInt(tier.slice(-1), 10);
+  const sub = SUB_ORDER[tier[0]] ?? 3;
+  return [level, sub];
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function renderBoard() {
+  const board = document.getElementById("board");
+  let rows = players.filter(p => p.general_tier);
+
+  if (searchTerm) {
+    rows = rows.filter(p => p.nick.toLowerCase().includes(searchTerm));
+  }
+
+  if (rows.length === 0) {
+    board.innerHTML = `<div class="empty">${
+      searchTerm ? `No player matching <strong>"${escapeHtml(searchTerm)}"</strong>.`
+      : `No one is ranked yet.<br><br>Once a club member's app pushes a result, they'll show up here automatically.`
+    }</div>`;
+    return;
+  }
+
+  rows.sort((a, b) => {
+    const [la, sa] = tierSortKey(a.general_tier), [lb, sb] = tierSortKey(b.general_tier);
+    if (la !== lb) return la - lb;
+    if (sa !== sb) return sa - sb;
+    return b.total_points - a.total_points;
+  });
+
+  board.innerHTML = "";
+  rows.forEach((p, i) => {
+    const modesForPlayer = playerModes.filter(pm => pm.nick === p.nick);
+    const chips = MODE_ORDER.map(mode => {
+      const pm = modesForPlayer.find(x => x.mode === mode);
+      const tier = pm && pm.tier;
+      const cls = tier ? "" : " unranked";
+      return `<div class="chip${cls}" style="--chip-color:${tierColor(tier)}">
+        <span class="mode-name">${mode}</span>
+        <span class="mode-tier">${tier || "—"}</span>
+      </div>`;
+    }).join("");
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.dataset.nick = p.nick;
+    card.style.setProperty("--tier-color", tierColor(p.general_tier));
+    card.innerHTML = `
+      <div class="rank${i < 3 ? " top3" : ""}">#${i + 1}</div>
+      <div class="nick">${escapeHtml(p.nick)}</div>
+      <div class="general">${p.general_tier}<span class="pts">${p.total_points} pts</span></div>
+      <div class="modes">${chips}</div>`;
+    board.appendChild(card);
+  });
+}
+
+function flashRow(nick) {
+  const el = document.querySelector(`[data-nick="${CSS.escape(nick)}"]`);
+  if (el) {
+    el.classList.add("flash");
+    setTimeout(() => el.classList.remove("flash"), 1000);
+  }
+}
+
+async function loadData() {
+  const [{ data: p }, { data: pm }] = await Promise.all([
+    client.from("players").select("*"),
+    client.from("player_modes").select("*"),
+  ]);
+  players = p || [];
+  playerModes = pm || [];
+  renderBoard();
+}
+
+document.getElementById("search").addEventListener("input", (e) => {
+  searchTerm = e.target.value.trim().toLowerCase();
+  renderBoard();
+});
+
+async function init() {
+  if (!configured) {
+    document.getElementById("statusText").textContent =
+      "not connected — add your Supabase URL and key in index.html";
+    document.querySelector(".dot").style.background = "#6b7d99";
+    renderBoard();
+    return;
+  }
+  client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  await loadData();
+  document.getElementById("statusText").textContent = "live";
+
+  client.channel("public:players")
+    .on("postgres_changes", { event: "*", schema: "public", table: "players" }, async (payload) => {
+      await loadData();
+      const nick = payload.new?.nick || payload.old?.nick;
+      if (nick) flashRow(nick);
+    })
+    .subscribe();
+
+  client.channel("public:player_modes")
+    .on("postgres_changes", { event: "*", schema: "public", table: "player_modes" }, async (payload) => {
+      await loadData();
+      const nick = payload.new?.nick || payload.old?.nick;
+      if (nick) flashRow(nick);
+    })
+    .subscribe();
+}
+
+init();
+</script>
+</body>
+</html>
