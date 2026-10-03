@@ -268,7 +268,7 @@ const fmt = n => (Math.round(n * 10) / 10).toString();
 
 let players = [], playerModes = [], client = null, searchTerm = "", activeFilter = "Overall";
 const configured = !SUPABASE_URL.includes("YOUR-PROJECT-REF");
-const SERVER_IP = "Not out yet...";
+const SERVER_IP = "mcpvp.club";
 
 function tierColor(t) { return t ? (LEVEL_COLOR[t.slice(-1)] || "#7d8799") : "var(--faint)"; }
 function tierSortKey(t) { return t ? [parseInt(t.slice(-1), 10), SUB_ORDER[t[0]] ?? 3] : [9, 9]; }
