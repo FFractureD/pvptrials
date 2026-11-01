@@ -396,8 +396,11 @@ function flashRow(nick) {
 async function loadData() {
   let p = null, pm = null;
   try {
-    const [a, b] = await Promise.all([client.from("players").select("*"), client.from("player_modes").select("*")]);
+    const [a, b, c] = await Promise.all([client.from("players").select("*"), client.from("player_modes").select("*"), client.from("bans").select("nick,until")]);
     p = a.data; pm = b.data;
+    const now = Date.now();
+    const banned = new Set((c.data || []).filter(x => !x.until || new Date(x.until).getTime() > now).map(x => x.nick.toLowerCase()));
+    if (banned.size) { p = (p || []).filter(x => !banned.has(x.nick.toLowerCase())); pm = (pm || []).filter(x => !banned.has(x.nick.toLowerCase())); }
   } catch (e) {}
   if (!p || !p.length) {
     const d = makeDemo(); players = d.P; playerModes = d.M; demoMode = true;
@@ -526,7 +529,7 @@ async function init() {
   }
   client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   await loadData();
-  for (const table of ["players", "player_modes"]) {
+  for (const table of ["players", "player_modes", "bans"]) {
     client.channel("public:" + table).on("postgres_changes", { event: "*", schema: "public", table }, async payload => {
       await loadData();
       const nick = payload.new?.nick || payload.old?.nick;
