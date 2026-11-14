@@ -1109,7 +1109,12 @@ async function loadData() {
     if (banned.size) { p = (p || []).filter(x => !banned.has(x.nick.toLowerCase())); pm = (pm || []).filter(x => !banned.has(x.nick.toLowerCase())); }
   } catch (e) {}
   if (!p || !p.length) { const d = makeDemo(); players = d.P; playerModes = d.M; demoMode = true; }
-  else { players = p; playerModes = pm || []; demoMode = false; }
+  else {
+    playerModes = pm || [];
+    const tiered = new Set(playerModes.filter(x => x.tier).map(x => x.nick));
+    players = p.filter(x => tiered.has(x.nick));
+    demoMode = false;
+  }
   refreshAll();
 }
 function handleHash() {
@@ -1127,10 +1132,12 @@ async function init() {
   await loadData(); handleHash();
   for (const table of ["players", "player_modes", "bans"]) {
     client.channel("public:" + table).on("postgres_changes", { event: "*", schema: "public", table }, async payload => {
-      await loadData();
       const n = payload.new || {}, o = payload.old || {}, nick = n.nick || o.nick;
-      if (nick) flashRow(nick);
-      if (table === "player_modes" && n.nick && n.tier && n.tier !== o.tier) toast(n.nick, n.nick, `${n.mode}: ${o.tier ? o.tier + " → " : "now "}${n.tier}`);
+      const before = table === "player_modes" && n.nick ? ((modesOf(n.nick).get(n.mode) || {}).tier || null) : null;
+      await loadData();
+      if (nick && table === "player_modes" && n.tier !== before) flashRow(nick);
+      else if (nick && table !== "player_modes") flashRow(nick);
+      if (table === "player_modes" && n.nick && n.tier && n.tier !== before) toast(n.nick, n.nick, `${n.mode}: ${before ? before + " → " : "now "}${n.tier}`);
     }).subscribe();
   }
 }
